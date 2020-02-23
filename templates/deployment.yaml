@@ -29,9 +29,19 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: '/etc/nginx/nginx.conf'
+              subPath: nginx.conf
+            - name: default-conf
+              mountPath: '/etc/nginx/conf.d/default.conf'
+              subPath: default.conf
+            - name: praeco-config
+              mountPath: '/var/www/html/praeco.config.json'
+              subPath: praeco.config.json
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -55,3 +65,30 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
+      volumes:
+#         - name: rules
+#           configMap:
+#             name: {{ template "praeco.fullname" . }}-rules
+#             items:
+# {{- range $key, $value := .Values.rules }}
+#             - key: {{ $key }}
+#               path: {{ $key}}.yaml
+# {{- end }}
+        - name: nginx-conf
+          configMap:
+            name: {{ template "praeco.fullname" . }}-nginx-config
+            items:
+            - key: nginx_config
+              path: nginx.conf
+        - name: default-conf
+          configMap:
+            name: {{ template "praeco.fullname" . }}-nginx-default-config
+            items:
+            - key: nginx_config_default
+              path: default.conf
+        - name: praeco-config
+          configMap:
+            name: {{ template "praeco.fullname" . }}-config
+            items:
+            - key: praeco_config
+              path: praeco.config.json

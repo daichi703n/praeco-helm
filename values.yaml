@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  tag: stable
+  repository: servercentral/praeco
+  tag: latest
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -33,7 +33,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 ingress:
   enabled: false
@@ -66,3 +66,8 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+praeco:
+  schema: http
+  external_host: praeco
+  port: 8080

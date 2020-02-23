@@ -25,5 +25,6 @@ data:
         sendfile        off;
         keepalive_timeout  60;
         #gzip  on;
+        add_header Cache-Control no-cache;
         include /etc/nginx/conf.d/*.conf;
     }

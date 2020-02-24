@@ -1,0 +1,4 @@
+elastalert:
+  slack_webhook_url: https://hooks.slack.com/services/XXXXXXXXX/XXXXXXXXX/XXXXXXXXXXXXXXXXXXXXXXXX
+  extraConfigOptions: 
+    slack_ignore_ssl_errors: true

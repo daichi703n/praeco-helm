@@ -1,0 +1,4 @@
+dependencies:
+  - name: elastalert
+    version: 0.1.0
+    repository: https://daichi703n.github.io/charts/stable

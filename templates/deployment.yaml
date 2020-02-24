@@ -66,14 +66,6 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       volumes:
-#         - name: rules
-#           configMap:
-#             name: {{ template "praeco.fullname" . }}-rules
-#             items:
-# {{- range $key, $value := .Values.rules }}
-#             - key: {{ $key }}
-#               path: {{ $key}}.yaml
-# {{- end }}
         - name: nginx-conf
           configMap:
             name: {{ template "praeco.fullname" . }}-nginx-config

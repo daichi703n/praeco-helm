@@ -46,8 +46,8 @@ Configurations for ElastAlert is cloned from [ElastAlert Helm](https://github.co
 
 | Parameter                                    | Description                                                                                | Default                         |
 |----------------------------------------------|--------------------------------------------------------------------------------------------|---------------------------------|
-| `elastalert.image.repository`                | docker image                                                                               | jertel/elastalert-docker        |
-| `elastalert.image.tag`                       | docker image tag                                                                           | 0.2.1                           |
+| `elastalert.image.repository`                | docker image                                                                               | daichi703n/elastalert        |
+| `elastalert.image.tag`                       | docker image tag                                                                           | 0.2.1-dev                       |
 | `elastalert.image.pullPolicy`                | image pull policy                                                                          | IfNotPresent                    |
 | `elastalert.podAnnotations`                  | Annotations to be added to pods                                                            | {}                              |
 | `elastalert.command`                         | command override for container                                                             | `NULL`                          |

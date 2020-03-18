@@ -1,6 +1,6 @@
 dependencies:
 - name: elastalert
   repository: https://daichi703n.github.io/charts/stable
-  version: 0.1.1
-digest: sha256:d8ddb7ba563e7160dd6cb6062a838ced8de53d017b864ea696cc57eb79681939
-generated: "2020-02-24T18:01:36.513695+09:00"
+  version: 0.1.2
+digest: sha256:b85bb74cd2b2a401f29edab3195fe86661def1b222559f5d97dd3a461cc50585
+generated: "2020-03-19T00:45:26.071379+09:00"

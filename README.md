@@ -69,7 +69,7 @@ Configurations for ElastAlert is cloned from [ElastAlert Helm](https://github.co
 | `elastalert.extraVolumes`                    | Additional volume definitions                                                              | []                              |
 | `elastalert.extraVolumeMounts`               | Additional volumeMount definitions                                                         | []                              |
 | `elastalert.resources`                       | Container resource requests and limits                                                     | {}                              |
-| `elastalert.rules`                           | Rule and alert configuration for Elastalert                                                | {} example shown in values.yaml |
+| ~~`elastalert.rules`~~                       | (NOT implemented) Rule and alert configuration for Elastalert                          | {} example shown in values.yaml |
 | `elastalert.runIntervalMins`                 | Default interval between alert checks, in minutes                                          | 1                               |
 | `elastalert.realertIntervalMins`             | Time between alarms for same rule, in minutes                                              | `NULL`                          |
 | `elastalert.alertRetryLimitMins`             | Time to retry failed alert deliveries, in minutes                                          | 2880 (2 days)                   |

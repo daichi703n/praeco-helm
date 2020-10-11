@@ -1,5 +1,5 @@
 dependencies:
   - name: elastalert
-    version: 0.1.2
+    version: 0.1.3
     repository: https://daichi703n.github.io/charts/stable
     # repository: file://..//elastalert # for testing

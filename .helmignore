@@ -21,3 +21,4 @@
 *.tmproj
 .vscode/
 /*.tgz
+vars.yml

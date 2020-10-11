@@ -8,6 +8,37 @@ elastalert:
   slack_webhook_url: https://hooks.slack.com/services/XXXXXXXXX/XXXXXXXXX/XXXXXXXXXXXXXXXXXXXXXXXX
   extraConfigOptions: 
     slack_ignore_ssl_errors: true
+  rules:
+    static: |
+      __praeco_full_path: static
+      __praeco_query_builder: '{"query":{"logicalOperator":"all","children":[]}}'
+      alert:
+        - slack
+      alert_subject: Static Alert
+      alert_subject_args: []
+      alert_text: |
+        Alert at `{0}`
+      alert_text_args:
+        - '@timestamp'
+      alert_text_type: alert_text_only
+      filter:
+        - query:
+            query_string:
+              query: '@timestamp:*'
+      import: BaseRule.config
+      index: filebeat-*
+      is_enabled: true
+      name: static
+      realert:
+        minutes: 0
+      slack_channel_override: '#general'
+      slack_msg_color: warning
+      slack_title_link: 'http://praeco:8080/rules/static'
+      slack_username_override: Praeco
+      timestamp_field: '@timestamp'
+      timestamp_type: iso
+      type: any
+      use_strftime_index: false
 
 praeco:
   schema: http

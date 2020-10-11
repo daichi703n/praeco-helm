@@ -44,41 +44,41 @@ $ helm delete my-release
 
 Configurations for ElastAlert is cloned from [ElastAlert Helm](https://github.com/helm/charts/tree/master/stable/elastalert).
 
-| Parameter                                    | Description                                                                                | Default                         |
-|----------------------------------------------|--------------------------------------------------------------------------------------------|---------------------------------|
-| `elastalert.image.repository`                | docker image                                                                               | daichi703n/elastalert        |
-| `elastalert.image.tag`                       | docker image tag                                                                           | 0.2.1-dev                       |
-| `elastalert.image.pullPolicy`                | image pull policy                                                                          | IfNotPresent                    |
-| `elastalert.podAnnotations`                  | Annotations to be added to pods                                                            | {}                              |
-| `elastalert.command`                         | command override for container                                                             | `NULL`                          |
-| `elastalert.args`                            | args override for container                                                                | `NULL`                          |
-| `elastalert.replicaCount`                    | number of replicas to run                                                                  | 1                               |
-| `elastalert.elasticsearch.host`              | elasticsearch endpoint to use                                                              | elasticsearch                   |
-| `elastalert.elasticsearch.port`              | elasticsearch port to use                                                                  | 80                              |
-| `elastalert.elasticsearch.useSsl`            | whether or not to connect to es_host using SSL                                             | False                           |
-| `elastalert.elasticsearch.username`          | Username for ES with basic auth                                                            | `NULL`                          |
-| `elastalert.elasticsearch.password`          | Password for ES with basic auth                                                            | `NULL`                          |
-| `elastalert.elasticsearch.verifyCerts`       | whether or not to verify TLS certificates                                                  | True                            |
-| `elastalert.elasticsearch.clientCert`        | path to a PEM certificate to use as the client certificate                                 | /certs/client.pem               |
-| `elastalert.elasticsearch.clientKey`         | path to a private key file to use as the client key                                        | /certs/client-key.pem           |
-| `elastalert.elasticsearch.caCerts`           | path to a CA cert bundle to use to verify SSL connections                                  | /certs/ca.pem                   |
-| `elastalert.elasticsearch.certsVolumes`      | certs volumes, required to mount ssl certificates when elasticsearch has tls enabled       | `NULL`                          |
-| `elastalert.elasticsearch.certsVolumeMounts` | mount certs volumes, required to mount ssl certificates when elasticsearch has tls enabled | `NULL`                          |
-| `elastalert.extraConfigOptions`              | Additional options to propagate to all rules, cannot be `alert`, `type`, `name` or `index` | `{}`                            |
-| `elastalert.optEnv`                          | Additional pod environment variable definitions                                            | []                              |
-| `elastalert.extraVolumes`                    | Additional volume definitions                                                              | []                              |
-| `elastalert.extraVolumeMounts`               | Additional volumeMount definitions                                                         | []                              |
-| `elastalert.resources`                       | Container resource requests and limits                                                     | {}                              |
-| ~~`elastalert.rules`~~                       | (NOT implemented) Rule and alert configuration for Elastalert                          | {} example shown in values.yaml |
-| `elastalert.runIntervalMins`                 | Default interval between alert checks, in minutes                                          | 1                               |
-| `elastalert.realertIntervalMins`             | Time between alarms for same rule, in minutes                                              | `NULL`                          |
-| `elastalert.alertRetryLimitMins`             | Time to retry failed alert deliveries, in minutes                                          | 2880 (2 days)                   |
-| `elastalert.bufferTimeMins`                  | Default rule buffer time, in minutes                                                       | 15                              |
-| `elastalert.writebackIndex`                  | Name or prefix of elastalert index(es)                                                     | elastalert_status               |
-| `elastalert.nodeSelector`                    | Node selector for deployment                                                               | {}                              |
-| `elastalert.tolerations`                     | Tolerations for deployment                                                                 | []                              |
-| `praeco.schema`                              | Schema for your Praeco Web GUI, used for link URL in alerts                                | http                            |
-| `praeco.external_host`                       | Host for your Praeco Web GUI                                                               | praeco                          |
-| `praeco.port`                                | Port for your Praeco Web GUI                                                               | 8080                            |
+| Parameter                                    | Description                                                                                | Default                              |
+|----------------------------------------------|--------------------------------------------------------------------------------------------|--------------------------------------|
+| `elastalert.image.repository`                | docker image                                                                               | daichi703n/elastalert                |
+| `elastalert.image.tag`                       | docker image tag                                                                           | 0.2.1-dev                            |
+| `elastalert.image.pullPolicy`                | image pull policy                                                                          | IfNotPresent                         |
+| `elastalert.podAnnotations`                  | Annotations to be added to pods                                                            | {}                                   |
+| `elastalert.command`                         | command override for container                                                             | `NULL`                               |
+| `elastalert.args`                            | args override for container                                                                | `NULL`                               |
+| `elastalert.replicaCount`                    | number of replicas to run                                                                  | 1                                    |
+| `elastalert.elasticsearch.host`              | elasticsearch endpoint to use                                                              | elasticsearch                        |
+| `elastalert.elasticsearch.port`              | elasticsearch port to use                                                                  | 80                                   |
+| `elastalert.elasticsearch.useSsl`            | whether or not to connect to es_host using SSL                                             | False                                |
+| `elastalert.elasticsearch.username`          | Username for ES with basic auth                                                            | `NULL`                               |
+| `elastalert.elasticsearch.password`          | Password for ES with basic auth                                                            | `NULL`                               |
+| `elastalert.elasticsearch.verifyCerts`       | whether or not to verify TLS certificates                                                  | True                                 |
+| `elastalert.elasticsearch.clientCert`        | path to a PEM certificate to use as the client certificate                                 | /certs/client.pem                    |
+| `elastalert.elasticsearch.clientKey`         | path to a private key file to use as the client key                                        | /certs/client-key.pem                |
+| `elastalert.elasticsearch.caCerts`           | path to a CA cert bundle to use to verify SSL connections                                  | /certs/ca.pem                        |
+| `elastalert.elasticsearch.certsVolumes`      | certs volumes, required to mount ssl certificates when elasticsearch has tls enabled       | `NULL`                               |
+| `elastalert.elasticsearch.certsVolumeMounts` | mount certs volumes, required to mount ssl certificates when elasticsearch has tls enabled | `NULL`                               |
+| `elastalert.extraConfigOptions`              | Additional options to propagate to all rules, cannot be `alert`, `type`, `name` or `index` | `{}`                                 |
+| `elastalert.optEnv`                          | Additional pod environment variable definitions                                            | []                                   |
+| `elastalert.extraVolumes`                    | Additional volume definitions                                                              | []                                   |
+| `elastalert.extraVolumeMounts`               | Additional volumeMount definitions                                                         | []                                   |
+| `elastalert.resources`                       | Container resource requests and limits                                                     | {}                                   |
+| `elastalert.rules`                           | Rule and alert configuration for Elastalert                                                | {} example shown in vars.yml.example |
+| `elastalert.runIntervalMins`                 | Default interval between alert checks, in minutes                                          | 1                                    |
+| `elastalert.realertIntervalMins`             | Time between alarms for same rule, in minutes                                              | `NULL`                               |
+| `elastalert.alertRetryLimitMins`             | Time to retry failed alert deliveries, in minutes                                          | 2880 (2 days)                        |
+| `elastalert.bufferTimeMins`                  | Default rule buffer time, in minutes                                                       | 15                                   |
+| `elastalert.writebackIndex`                  | Name or prefix of elastalert index(es)                                                     | elastalert_status                    |
+| `elastalert.nodeSelector`                    | Node selector for deployment                                                               | {}                                   |
+| `elastalert.tolerations`                     | Tolerations for deployment                                                                 | []                                   |
+| `praeco.schema`                              | Schema for your Praeco Web GUI, used for link URL in alerts                                | http                                 |
+| `praeco.external_host`                       | Host for your Praeco Web GUI                                                               | praeco                               |
+| `praeco.port`                                | Port for your Praeco Web GUI                                                               | 8080                                 |
 
 If you have any ploblem, feature-request, please open a github issue.

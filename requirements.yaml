@@ -1,5 +1,0 @@
-dependencies:
-  - name: elastalert
-    version: 0.1.4
-    repository: https://daichi703n.github.io/charts/stable
-    #repository: file://..//elastalert-helm # for testing

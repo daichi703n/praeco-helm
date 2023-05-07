@@ -77,8 +77,11 @@ Configurations for ElastAlert is cloned from [ElastAlert Helm](https://github.co
 | `elastalert.writebackIndex`                  | Name or prefix of elastalert index(es)                                                     | elastalert_status                    |
 | `elastalert.nodeSelector`                    | Node selector for deployment                                                               | {}                                   |
 | `elastalert.tolerations`                     | Tolerations for deployment                                                                 | []                                   |
-| `elastalert.metrics.enabled`                 | Enable elastalert prometheus endpoint                                                      | `false`                              |
+| `elastalert.metrics.enabled`                 | Enable elastalert prometheus endpoint                                                      | `true`                               |
 | `elastalert.metrics.port`                    | If "metrics" is set to true, prometheus metrics will be exposed by the pod on this port.   | 9979                                 |
+| `elastalert.metrics.serviceMonitor.enabled`  | Enable elastalert prometheus service monitor                                               | `true`                               |
+| `elastalert.metrics.serviceMonitor.namespace`| Enable elastalert prometheus service monitor namespace                                     | `prometheus`                         |
+| `elastalert.metrics.prometheusRule.enabled`  | Enable elastalert prometheus rules                                                         | `true`                               |
 | `praeco.schema`                              | Schema for your Praeco Web GUI, used for link URL in alerts                                | http                                 |
 | `praeco.external_host`                       | Host for your Praeco Web GUI                                                               | praeco                               |
 | `praeco.port`                                | Port for your Praeco Web GUI                                                               | 8080                                 |

@@ -46,8 +46,11 @@ Configurations for ElastAlert is cloned from [ElastAlert Helm](https://github.co
 
 | Parameter                                    | Description                                                                                | Default                              |
 |----------------------------------------------|--------------------------------------------------------------------------------------------|--------------------------------------|
-| `elastalert.image.repository`                | docker image                                                                               | daichi703n/elastalert                |
-| `elastalert.image.tag`                       | docker image tag                                                                           | 0.2.1-dev                            |
+| `image.repository`                           | docker image                                                                               | servercentral/praeco                 |
+| `image.tag`                                  | docker image tag                                                                           | latest                               |
+| `image.pullPolicy`                           | image pull policy                                                                          | IfNotPresent                         |
+| `elastalert.image.repository`                | docker image                                                                               | praecoapp/elastalert-server          |
+| `elastalert.image.tag`                       | docker image tag                                                                           | "20230219"                           |
 | `elastalert.image.pullPolicy`                | image pull policy                                                                          | IfNotPresent                         |
 | `elastalert.podAnnotations`                  | Annotations to be added to pods                                                            | {}                                   |
 | `elastalert.command`                         | command override for container                                                             | `NULL`                               |

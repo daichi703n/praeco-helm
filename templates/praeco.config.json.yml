@@ -10,7 +10,11 @@ metadata:
 data:
   praeco_config: |-
     {
+      {{- if .Values.praeco.port -}}
       "appUrl": "{{ .Values.praeco.schema }}://{{ .Values.praeco.external_host }}:{{ .Values.praeco.port }}",
+      {{- else -}}
+      appUrl": "{{ .Values.praeco.schema }}://{{ .Values.praeco.external_host }}",
+      {{- end -}}
       "errorLoggerUrl": "",
       "hidePreconfiguredFields": []
     }

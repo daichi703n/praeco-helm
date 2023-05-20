@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: servercentral/praeco
-  tag: latest
+  repository: praecoapp/praeco
+  tag: 1.8.13
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []

@@ -4,7 +4,7 @@
 
 [Praeco](https://github.com/johnsusek/praeco) is a very useful Web GUI for [elastalert2](https://github.com/jertel/elastalert2).
 
-[elastalert2](hhttps://github.com/jertel/elastalert2) is a simple framework for alerting on anomalies, spikes, or other patterns of interest from data in Elasticsearch.
+[elastalert2](https://github.com/jertel/elastalert2) is a simple framework for alerting on anomalies, spikes, or other patterns of interest from data in Elasticsearch.
 
 ## Compatibility
 **This chart supports only ES7.**

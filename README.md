@@ -2,9 +2,9 @@
 
 **This Helm Chart is Beta Release.**
 
-[Praeco](https://github.com/ServerCentral/praeco) is a very useful Web GUI for [elastalert](https://github.com/Yelp/elastalert).
+[Praeco](https://github.com/johnsusek/praeco) is a very useful Web GUI for [elastalert2](https://github.com/jertel/elastalert2).
 
-[elastalert](https://github.com/Yelp/elastalert) is a simple framework for alerting on anomalies, spikes, or other patterns of interest from data in Elasticsearch.
+[elastalert2](https://github.com/jertel/elastalert2) is a simple framework for alerting on anomalies, spikes, or other patterns of interest from data in Elasticsearch.
 
 ## Compatibility
 **This chart supports only ES7.**
@@ -46,7 +46,7 @@ Configurations for ElastAlert is cloned from [ElastAlert Helm](https://github.co
 
 | Parameter                                    | Description                                                                                | Default                              |
 |----------------------------------------------|--------------------------------------------------------------------------------------------|--------------------------------------|
-| `image.repository`                           | docker image                                                                               | servercentral/praeco                 |
+| `image.repository`                           | docker image                                                                               | praecoapp/praeco                     |
 | `image.tag`                                  | docker image tag                                                                           | latest                               |
 | `image.pullPolicy`                           | image pull policy                                                                          | IfNotPresent                         |
 | `elastalert.image.repository`                | docker image                                                                               | praecoapp/elastalert-server          |

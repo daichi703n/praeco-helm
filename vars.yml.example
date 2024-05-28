@@ -2,9 +2,9 @@ elastalert:
   elasticsearch: 
     host: elasticsearch-master
     port: 9200
-    useSsl: false
-    username: ""
-    password: ""
+    useSsl: true
+    username: "elastic"
+    password: "your_elastic_password"
   slack_webhook_url: https://hooks.slack.com/services/XXXXXXXXX/XXXXXXXXX/XXXXXXXXXXXXXXXXXXXXXXXX
   extraConfigOptions: 
     slack_ignore_ssl_errors: true

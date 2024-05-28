@@ -7,7 +7,7 @@
 [elastalert2](https://github.com/jertel/elastalert2) is a simple framework for alerting on anomalies, spikes, or other patterns of interest from data in Elasticsearch.
 
 ## Compatibility
-**This chart supports only ES7.**
+**This chart supports ES7, ES8.**
 
 If there are many requests, I'll consider to support ES6. I think that switching container tag enables to support other ES ver. (Container Image Tags are not implemented...)
 

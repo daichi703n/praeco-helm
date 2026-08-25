@@ -87,14 +87,23 @@ jobs:
           token: ${{ secrets.PRAECO_CHARTS_PUSH_TOKEN }}
           path: charts
 
-      # Use helm repo index --merge to preserve the existing index.yaml. Do NOT pass --url.
+      # Preserve the existing index.yaml (including created timestamps of older
+      # entries). helm repo index regenerates created for every tgz it scans, so
+      # scan ONLY the new tgz in an isolated dir and let --merge carry the rest
+      # over from the existing index. Do NOT pass --url (entries use relative urls).
       - name: Update Helm repository index
         shell: bash
         run: |
           set -euo pipefail
+          # Publish the new tgz into stable/
           cp dist/*.tgz "charts/${CHARTS_DIR}/"
+          # Index only the new tgz so existing entries keep their timestamps.
+          rm -rf "charts/${CHARTS_DIR}/tmp"
+          mkdir "charts/${CHARTS_DIR}/tmp"
+          cp dist/*.tgz "charts/${CHARTS_DIR}/tmp/"
           cd "charts/${CHARTS_DIR}"
-          helm repo index --merge index.yaml .
+          helm repo index --merge index.yaml tmp
+          rm -rf tmp
           git --no-pager diff -- index.yaml || true
 
       - name: Publish to Helm repository

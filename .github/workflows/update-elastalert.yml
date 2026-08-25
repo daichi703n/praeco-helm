@@ -1,0 +1,145 @@
+name: Update ElastAlert Dependency
+
+on:
+  repository_dispatch:
+    types:
+      - elastalert-release
+  workflow_dispatch:
+    inputs:
+      elastalert_version:
+        description: "ElastAlert Helm Chart version (e.g. 0.1.6)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  PAGES_BASE_URL: https://daichi703n.github.io/charts/stable
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+
+      - name: Setup yq
+        uses: mikefarah/yq@v4
+
+      # Resolve the version from either repository_dispatch or workflow_dispatch.
+      - name: Resolve ElastAlert version
+        id: version
+        shell: bash
+        env:
+          EVENT_VERSION: ${{ github.event.client_payload.version }}
+          INPUT_VERSION: ${{ inputs.elastalert_version }}
+        run: |
+          set -euo pipefail
+          if [ -n "${EVENT_VERSION:-}" ]; then
+            version="${EVENT_VERSION}"
+          else
+            version="${INPUT_VERSION:-}"
+          fi
+          if [[ ! "${version}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid version: '${version}'"
+            exit 1
+          fi
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      # Update only the elastalert dependency's version, using yq so field order does not matter.
+      - name: Update ElastAlert dependency version
+        env:
+          ELASTALERT_VERSION: ${{ steps.version.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          yq -i \
+            '(.dependencies[] | select(.name == "elastalert") | .version) = strenv(ELASTALERT_VERSION)' \
+            Chart.yaml
+          echo "--- Chart.yaml dependencies ---"
+          yq '.dependencies' Chart.yaml
+
+      # Right after publishing, GitHub Pages may not have rebuilt yet, so the new version
+      # cannot be resolved. Retry until the target tgz appears in the index before updating deps.
+      - name: Wait for chart to be published on Pages
+        env:
+          ELASTALERT_VERSION: ${{ steps.version.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="${PAGES_BASE_URL}/index.yaml"
+          target="elastalert-${ELASTALERT_VERSION}.tgz"
+          echo "Waiting for ${target} to appear in ${url}"
+          for i in $(seq 1 30); do
+            if curl -fsSL "${url}" | grep -q "${target}"; then
+              echo "Found ${target} (attempt ${i})."
+              exit 0
+            fi
+            echo "Not yet available (attempt ${i}/30); sleeping 20s..."
+            sleep 20
+          done
+          echo "ERROR: ${target} did not appear on Pages within timeout."
+          exit 1
+
+      - name: Update Helm dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          helm repo add daichi703n "${PAGES_BASE_URL}"
+          helm repo update
+          helm dependency update .
+
+      - name: Verify dependencies
+        run: helm dependency list .
+
+      # Bump Praeco's own chart version by one patch. Use yq to avoid numeric coercion (e.g. exponent notation).
+      - name: Bump Praeco patch version
+        id: praeco
+        shell: bash
+        run: |
+          set -euo pipefail
+          current="$(yq '.version' Chart.yaml)"
+          IFS='.' read -r major minor patch <<< "${current}"
+          new_version="${major}.${minor}.$((patch + 1))"
+          yq -i ".version = \"${new_version}\"" Chart.yaml
+          echo "Praeco version: ${current} -> ${new_version}"
+          echo "new_version=${new_version}" >> "$GITHUB_OUTPUT"
+
+      - name: Helm lint
+        run: helm lint .
+
+      - name: Helm template
+        run: helm template test .
+
+      - name: Show changes
+        run: git --no-pager diff -- Chart.yaml Chart.lock || true
+
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ELASTALERT_VERSION: ${{ steps.version.outputs.version }}
+          PRAECO_VERSION: ${{ steps.praeco.outputs.new_version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch="update-elastalert-${ELASTALERT_VERSION}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "${branch}"
+          git add Chart.yaml Chart.lock
+          if git diff --cached --quiet; then
+            echo "No changes detected; skipping PR."
+            exit 0
+          fi
+          git commit -m "chore: update elastalert to ${ELASTALERT_VERSION}"
+          git push --set-upstream origin "${branch}"
+          gh pr create \
+            --base master \
+            --head "${branch}" \
+            --title "chore: update elastalert to ${ELASTALERT_VERSION} (praeco ${PRAECO_VERSION})" \
+            --body "Automated dependency update. Update elastalert to ${ELASTALERT_VERSION}, regenerate Chart.lock, and bump Praeco chart to ${PRAECO_VERSION}. After merge, release by pushing tag v${PRAECO_VERSION}."

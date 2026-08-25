@@ -102,7 +102,9 @@ jobs:
           mkdir "charts/${CHARTS_DIR}/tmp"
           cp dist/*.tgz "charts/${CHARTS_DIR}/tmp/"
           cd "charts/${CHARTS_DIR}"
+          # helm writes the merged result to tmp/index.yaml; move it back into place.
           helm repo index --merge index.yaml tmp
+          mv tmp/index.yaml index.yaml
           rm -rf tmp
           git --no-pager diff -- index.yaml || true
 

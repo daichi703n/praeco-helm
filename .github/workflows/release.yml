@@ -1,0 +1,113 @@
+name: Release Helm Chart
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+env:
+  CHARTS_REPO: daichi703n/charts
+  CHARTS_DIR: stable
+  PAGES_BASE_URL: https://daichi703n.github.io/charts/stable
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+
+      - name: Verify chart version matches tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          chart_version="$(awk '/^version:/ {print $2; exit}' Chart.yaml)"
+          tag_version="${GITHUB_REF_NAME#v}"
+          echo "Chart version: ${chart_version}"
+          echo "Tag version:   ${tag_version}"
+          if [ "${chart_version}" != "${tag_version}" ]; then
+            echo "ERROR: Chart.yaml version (${chart_version}) does not match Git tag (${tag_version})."
+            exit 1
+          fi
+
+      # Praeco has a dependency, so fetch it before packaging.
+      - name: Update Helm dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          helm repo add daichi703n "${PAGES_BASE_URL}"
+          helm repo update
+          helm dependency build .
+
+      - name: Helm lint
+        run: helm lint .
+
+      - name: Helm template
+        run: helm template test .
+
+      - name: Package chart
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          helm package . --destination dist
+          ls -l dist
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # --generate-notes can fail when there is no prior release; retry without notes on failure.
+          if ! gh release create "${GITHUB_REF_NAME}" \
+                dist/*.tgz \
+                --title "${GITHUB_REF_NAME}" \
+                --generate-notes; then
+            echo "generate-notes failed; retrying without notes."
+            gh release create "${GITHUB_REF_NAME}" \
+              dist/*.tgz \
+              --title "${GITHUB_REF_NAME}"
+          fi
+
+      # The Helm repository is a separate repo (daichi703n/charts), not this repo's gh-pages.
+      - name: Checkout charts repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.CHARTS_REPO }}
+          ref: gh-pages
+          token: ${{ secrets.PRAECO_CHARTS_PUSH_TOKEN }}
+          path: charts
+
+      # Use helm repo index --merge to preserve the existing index.yaml. Do NOT pass --url.
+      - name: Update Helm repository index
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp dist/*.tgz "charts/${CHARTS_DIR}/"
+          cd "charts/${CHARTS_DIR}"
+          helm repo index --merge index.yaml .
+          git --no-pager diff -- index.yaml || true
+
+      - name: Publish to Helm repository
+        working-directory: charts
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "${CHARTS_DIR}/"
+          if git diff --cached --quiet; then
+            echo "No changes to publish."
+            exit 0
+          fi
+          git commit -m "Release praeco ${GITHUB_REF_NAME}"
+          git push origin gh-pages

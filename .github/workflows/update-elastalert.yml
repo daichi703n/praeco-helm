@@ -142,4 +142,4 @@ jobs:
             --base master \
             --head "${branch}" \
             --title "chore: update elastalert to ${ELASTALERT_VERSION} (praeco ${PRAECO_VERSION})" \
-            --body "Automated dependency update. Update elastalert to ${ELASTALERT_VERSION}, regenerate Chart.lock, and bump Praeco chart to ${PRAECO_VERSION}. After merge, release by pushing tag v${PRAECO_VERSION}."
+            --body "Automated dependency update. Update elastalert to ${ELASTALERT_VERSION}, regenerate Chart.lock, and bump Praeco chart to ${PRAECO_VERSION}. After merge, release by pushing tag ${PRAECO_VERSION}."
